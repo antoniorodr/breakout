@@ -75,8 +75,8 @@ class Scoreboard(Turtle):
         self.lives -= 1
         self.update_scoreboard()
 
-    def scoring(self):
-        self.score += 1
+    def scoring(self, points):
+        self.score += points
         self.update_scoreboard()
 
 
