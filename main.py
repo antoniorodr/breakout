@@ -1,6 +1,8 @@
 from turtle import Screen
-from paddle import Paddle, Ball, Scoreboard
+from paddle import Paddle, Ball, Scoreboard, Brick
 import time
+
+brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"]
 
 screen = Screen()
 screen.bgcolor("black")
@@ -11,6 +13,12 @@ screen.tracer(0)
 paddle = Paddle((0, -320))
 ball = Ball()
 scoreboard = Scoreboard()
+
+for n in range(len(brick_colors)):
+    y_position = 300 - n * (30 + 10)
+    color = brick_colors[n % len(brick_colors)]
+    for x in range(-610, 650, 100):
+        Brick((x, y_position), color)
 
 
 screen.listen()
@@ -23,19 +31,17 @@ while game_on:
     screen.update()
     ball.move()
 
-    if ball.ycor() > 280 or ball.ycor() < - 280:
+    if ball.xcor() > 620 or ball.xcor() < - 620:
+        ball.bounce_x()
+
+    if ball.distance(paddle) < 30:
+        ball.bounce_y()
+    
+    if ball.ycor() > 300:
         ball.bounce_y()
 
-    if ball.distance(paddle) < 50 and ball.xcor() > 320 or ball.distance(paddle) < 50 and ball.xcor() < -320:
-        ball.bounce_x()
-    
-    if ball.xcor() > 380:
+    if ball.ycor() < - 300:
         ball.reset_position()
-        scoreboard.l_point()
-        
-
-    if ball.xcor() < - 380:
-        ball.reset_position()
-        scoreboard.r_point()
+        scoreboard.lose()
 
 screen.exitonclick()

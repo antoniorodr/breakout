@@ -10,12 +10,22 @@ class Paddle(Turtle):
         self.goto(position)
 
     def go_right(self):
-        new_x = self.xcor() + 20
+        new_x = self.xcor() + 40
         self.goto(new_x, self.ycor())
 
     def go_left(self):
-        new_x = self.xcor() - 20
+        new_x = self.xcor() - 40
         self.goto(new_x, self.ycor())
+
+class Brick(Turtle):
+    def __init__(self, position: tuple, color: str):
+        super().__init__()
+        self.shape("square")
+        self.color(color)
+        self.shapesize(stretch_wid = 1.5, stretch_len =4)
+        self.penup()
+        self.goto(position)
+
 
 class Ball(Turtle):
     def __init__(self):
@@ -25,11 +35,11 @@ class Ball(Turtle):
         self.penup()
         self.x_move = 10
         self.y_move = 10
-        self.move_speed = 0.1
+        self.move_speed = 0.05
 
     def move(self):
-        new_x = self.xcor() + self.x_move
-        new_y = self.ycor() + self.y_move
+        new_x = self.xcor() - self.x_move
+        new_y = self.ycor() - self.y_move
         self.goto(new_x, new_y)
 
     def bounce_y(self):
@@ -41,8 +51,8 @@ class Ball(Turtle):
 
     def reset_position(self):
         self.goto(0, 0)
-        self.move_speed = 0.1
-        self.bounce_x()
+        self.move_speed = 0.05
+        self.bounce_y()
 
 class Scoreboard(Turtle):
     def __init__(self):
@@ -50,25 +60,28 @@ class Scoreboard(Turtle):
         self.hideturtle()
         self.color("white")
         self.penup()
-        self.l_score = 0
-        self.r_score = 0
+        self.lives = 5
+        self.score = 0
+        self.lives_text = f"Lives: {self.lives}"
+        self.score_text = f"Your score: {self.score}"
         self.update_scoreboard()
         
     def update_scoreboard(self):
         self.clear()
-        self.goto(-100, 200)
-        self.write(self.l_score, align = "center", font=("Courier", 50, "normal"))
-        self.goto(100, 200)
-        self.write(self.r_score, align = "center", font=("Courier", 50, "normal"))
+        self.goto(-300, 340)
+        self.write(self.lives_text, align = "center", font=("Courier", 30, "normal"))
+        self.goto(300, 340)
+        self.write(self.score_text, align = "center", font=("Courier", 30, "normal"))
 
-
-    def l_point(self):
-        self.l_score += 1
+    def lose(self):
+        self.lives -= 1
         self.update_scoreboard()
 
-    def r_point(self):
-        self.r_score += 1
+    def scoring(self):
+        self.score += 1
         self.update_scoreboard()
+
+
 
 if __name__ == "__main__":
     paddle = Paddle()
