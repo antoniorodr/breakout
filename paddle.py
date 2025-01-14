@@ -25,8 +25,6 @@ class Brick(Turtle):
         self.shapesize(stretch_wid = 1.5, stretch_len =4)
         self.penup()
         self.goto(position)
-
-
 class Ball(Turtle):
     def __init__(self):
         super().__init__()
@@ -47,12 +45,11 @@ class Ball(Turtle):
 
     def bounce_x(self):
         self.x_move *= -1
-        self.move_speed *= 0.9
 
     def reset_position(self):
         self.goto(0, 0)
         self.move_speed = 0.05
-        self.bounce_y()
+        self.bounce_x()
 
 class Scoreboard(Turtle):
     def __init__(self):
@@ -62,16 +59,17 @@ class Scoreboard(Turtle):
         self.penup()
         self.lives = 5
         self.score = 0
-        self.lives_text = f"Lives: {self.lives}"
-        self.score_text = f"Your score: {self.score}"
         self.update_scoreboard()
-        
+
     def update_scoreboard(self):
         self.clear()
         self.goto(-300, 340)
-        self.write(self.lives_text, align = "center", font=("Courier", 30, "normal"))
+        lives_text = f"Lives: {self.lives}"
+        self.write(lives_text, align="center", font=("Courier", 30, "normal"))
+        
         self.goto(300, 340)
-        self.write(self.score_text, align = "center", font=("Courier", 30, "normal"))
+        score_text = f"Your score: {self.score}"
+        self.write(score_text, align="center", font=("Courier", 30, "normal"))
 
     def lose(self):
         self.lives -= 1

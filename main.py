@@ -1,8 +1,11 @@
 from turtle import Screen
 from paddle import Paddle, Ball, Scoreboard, Brick
+from tkinter import messagebox
 import time
 
-brick_colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+BRICK_COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
+game_on = True
+bricks = []
 
 screen = Screen()
 screen.bgcolor("black")
@@ -14,28 +17,39 @@ paddle = Paddle((0, -320))
 ball = Ball()
 scoreboard = Scoreboard()
 
-for n in range(len(brick_colors)):
+for n in range(len(BRICK_COLORS)):
     y_position = 300 - n * (30 + 10)
-    color = brick_colors[n % len(brick_colors)]
+    color = BRICK_COLORS[n % len(BRICK_COLORS)]
     for x in range(-610, 650, 100):
-        Brick((x, y_position), color)
-
+        brick = Brick((x, y_position), color)
+        bricks.append(brick)
 
 screen.listen()
 screen.onkey(paddle.go_right, "Right")
 screen.onkey(paddle.go_left, "Left")
 
-game_on = True
 while game_on:
     time.sleep(ball.move_speed)
     screen.update()
     ball.move()
 
+    if scoreboard.lives == 0:
+        messagebox.showinfo(message = f"Game Over. Final score: {scoreboard.score}. Thanks for playing!")
+        screen.exitonclick()
+
     if ball.xcor() > 620 or ball.xcor() < - 620:
         ball.bounce_x()
 
-    if ball.distance(paddle) < 30:
+    if ball.distance(paddle) < 35:
         ball.bounce_y()
+
+    for brick in bricks:
+        if ball.distance(brick) < 45:
+            scoreboard.scoring()
+            ball.bounce_y()
+            bricks.remove(brick)
+            brick.hideturtle()
+            break 
     
     if ball.ycor() > 300:
         ball.bounce_y()
@@ -43,5 +57,6 @@ while game_on:
     if ball.ycor() < - 300:
         ball.reset_position()
         scoreboard.lose()
+        time.sleep(1)
 
 screen.exitonclick()
