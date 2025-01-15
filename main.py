@@ -1,4 +1,4 @@
-from turtle import Screen
+from turtle import Screen, Turtle
 from paddle import Paddle, Ball, Scoreboard, Brick
 from tkinter import messagebox
 import time
@@ -7,8 +7,12 @@ BRICK_COLORS = ["IndianRed1", "LightSalmon1", "LightGoldenrod1", "LightGreen", "
 game_on = True
 bricks = []
 
+CURSOR_SIZE = 20
+FONT_SIZE = 12
+FONT = ('Arial', FONT_SIZE, 'bold')
+
 screen = Screen()
-screen.bgcolor("black")
+screen.bgcolor("gray20")
 screen.setup(width = 1300, height = 800)
 screen.title("Breakout")
 screen.tracer(0)
@@ -44,24 +48,14 @@ while game_on:
     if ball.xcor() > 620 or ball.xcor() < - 620:
         ball.bounce_x()
 
-    if ball.distance(paddle) <= 35:
+    if (ball.ycor() > -320 and ball.ycor() < -320 + 24) and \
+       (ball.xcor() > paddle.xcor() - 100/ 2 and ball.xcor() < paddle.xcor() + 100 / 2):
         ball.bounce_y()
 
     for index, brick in enumerate(bricks):
         if ball.distance(brick) < 40:
             row_index = index // 13
-            if row_index == 5:
-                score_increment = 1
-            elif row_index == 4:
-                score_increment = 3
-            elif row_index == 3:
-                score_increment = 5
-            elif row_index == 2:
-                score_increment = 7
-            elif row_index == 1:
-                score_increment = 9
-            elif row_index == 0:
-                score_increment = 11
+            score_increment = 2 * (5 - row_index) + 1
             scoreboard.scoring(score_increment)
             ball.bounce_y()
             bricks.remove(brick)
@@ -74,6 +68,7 @@ while game_on:
     if ball.ycor() <= - 350:
         ball.reset_position()
         scoreboard.lose()
+        paddle.start_position((0, -320))
         time.sleep(1)
 
 screen.exitonclick()

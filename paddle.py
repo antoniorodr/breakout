@@ -17,6 +17,9 @@ class Paddle(Turtle):
         new_x = self.xcor() - 40
         self.goto(new_x, self.ycor())
 
+    def start_position(self, position: tuple):
+        self.goto(position)
+
 class Brick(Turtle):
     def __init__(self, position: tuple, color: str):
         super().__init__()
@@ -78,6 +81,7 @@ class Scoreboard(Turtle):
     def scoring(self, points):
         self.score += points
         self.update_scoreboard()
+
 
 
 
